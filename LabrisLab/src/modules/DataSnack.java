@@ -1,7 +1,9 @@
 package modules;
 import java.io.*;
 
-//testing github
+/* This program takes in a input.txt file and spits out the total masses in a different 
+ * file
+ */
 
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -48,7 +50,7 @@ public class DataSnack
 					hmap.put(data[1], mass);
 				}
 				*/
-				//System.out.println(data[1]);
+				//System.out.println(data[2]);
 				double mass = Double.parseDouble(data[2]);
 				hmap.put(data[1], mass);				
 			}
@@ -230,9 +232,24 @@ public class DataSnack
 		//System.out.println("Total mass is: " + finalMass);
 		//System.out.print(yMass.get(0));
 		createTotalChargeMass(charge); 
-		createChargeMass(cMass,yMass,charge); 
+		createChargeMass(cMass,yMass,charge);
+		
+		
+		//Hairpin section 
+		System.out.println("Enter a keystone pair x: "); 
+		int keystoneX = main.nextInt();
+		System.out.println("Enter a keystone pair y: ");
+		int keystoneY = main.nextInt();
+		ArrayList<String> fragments = new ArrayList<>();
+		//fragments will hold the bases between the keystone pairs  
+		for(int i = keystoneX-1;i<=keystoneY-1;i++)
+		{
+			fragments.add(base.get(i)); 
+		}
+		hairpin(fragments,hmap,keystoneX,keystoneY); 
+		
+		
 	}	
-	
 	//creates a text file with the charge masses 
 	public static void createChargeMass(ArrayList<String> c, ArrayList<String> y, int charge)
 	{
@@ -299,7 +316,7 @@ public class DataSnack
 		{
 			System.out.print("Error in writing to file");
 			return; 
-		}
+		}		
 	}
 	
 	/*public static void createChargeMass(ArrayList<String> c, ArrayList<String> y, int charge)
@@ -398,6 +415,65 @@ public class DataSnack
 			System.out.print("Error in writing to file");
 			return; 
 		}
-		
+	}
+	public static void hairpin(ArrayList<String>data, HashMap<String,Double> hmap,int x,int y)
+	{
+		int tempx = x; 
+		//int ycounter = x +1; 
+		//this calculates the cc segmentation 
+		for(int i = 0; i<data.size();i++)
+		{
+			String base = data.get(i);
+			double mass = hmap.get(base);
+			System.out.println(base + tempx + ":" + base + tempx + "cc : " + mass);
+			int ycounter = tempx +1; 
+			for(int j = i +1; j < data.size();j++)
+			{
+				String temp = data.get(j);
+				double current = hmap.get(temp);
+				mass += current; 
+				System.out.println(base + tempx + ":" + temp + ycounter + "cc : " + mass);
+				ycounter++; 
+			}
+			tempx++; 
+		}
+		System.out.println(); 
+		tempx = x; 
+		//this calcualtes the cy segmentation 
+		for(int i = 0; i<data.size();i++)
+		{
+			String base = data.get(i);
+			double mass = hmap.get(base) - 30.9820042;
+			System.out.println(base + tempx + ":" + base + tempx + "cc : " + mass);
+			int ycounter = tempx +1; 
+			for(int j = i +1; j < data.size();j++)
+			{
+				String temp = data.get(j);
+				double current = hmap.get(temp);
+				mass += current; 
+				System.out.println(base + tempx + ":" + temp + ycounter + "cc : " + mass);
+				ycounter++; 
+			}
+			tempx++; 
+		}
+		System.out.println(); 
+		tempx = x; 
+		//this calcualtes the yc segmentation 
+		for(int i = 0; i<data.size();i++)
+		{
+			String base = data.get(i);
+			double mass = hmap.get(base) + 92.929531;
+			System.out.println(base + tempx + ":" + base + tempx + "cc : " + mass);
+			int ycounter = tempx +1; 
+			for(int j = i +1; j < data.size();j++)
+			{
+				String temp = data.get(j);
+				double current = hmap.get(temp);
+				mass += current; 
+				System.out.println(base + tempx + ":" + temp + ycounter + "cc : " + mass);
+				ycounter++; 
+			}
+			tempx++; 
+		}
 	}
 }
